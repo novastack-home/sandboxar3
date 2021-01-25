@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>3D</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./styles/styles.css">
+  <script src="./scripts/focus-visible.js" defer></script>
+
+</head>
+
+<body>
+  <div id="card">
+    <model-viewer src="./assets/tool.glb" ar ar-scale="auto" camera-controls alt="A 3D model carousel"
+      ios-src="./assets/tool.usdz" poster="./assets/tool.png" shadow-intensity="1">
+
+      <button slot="ar-button" id="ar-button">
+        AR View
+      </button>
+
+      <div id="ar-prompt">
+        <img src="./assets/hand.png">
+      </div>
+
+      <div class="slider">
+        <div class="slides">
+
+          </button><button class="slide selected" onclick="switchSrc(this, 'tool')"
+            style="background-image: url('./assets/tool.png'); margin-left: 5px">
+
+            <button class="slide" onclick="switchSrc(this, 'house')"
+              style="background-image: url('./assets/house.png');">
+
+            </button><button class="slide" onclick="switchSrc(this, 'house_2')"
+              style="background-image: url('./assets/house_2.png');">
+
+            </button></div>
+      </div>
+    </model-viewer>
+  </div>
+  <script type="module" src="./scripts/model-viewer.min.js">
+  </script>
+  <script nomodule src="./scripts/model-viewer-legacy.js">
+  </script>
+  <script>
+    const modelViewer = document.querySelector("model-viewer");
+    const cardDOM = document.getElementById("card")
+    window.switchSrc = (element, name) => {
+      const base = "./assets/" + name;
+
+      modelViewer.src = base + '.glb';
+      modelViewer["ios-src"] = base + '.usdz';
+      cardDOM.innerHTML = `
+        <model-viewer src="${base}.glb" ar ar-scale="auto" camera-controls alt="A 3D model carousel" ios-src="${base}.usdz" poster="${base}.png" shadow-intensity="1"> <button slot="ar-button" id="ar-button">
+          AR View
+        </button>
+
+        <div id="ar-prompt">
+          <img src="./assets/hand.png">
+        </div>
+
+        <div class="slider">
+        <div class="slides">
+
+        </button><button class="slide selected" onclick="switchSrc(this, 'tool')"
+          style="background-image: url('./assets/tool.png'); margin-left: 5px">
+
+        <button class="slide" onclick="switchSrc(this, 'house')"
+          style="background-image: url('./assets/house.png');">
+
+        </button><button class="slide" onclick="switchSrc(this, 'house_2')"
+          style="background-image: url('./assets/house_2.png');">
+
+        </button></div>`;
+
+      const slides = document.querySelectorAll(".slide");
+      slides.forEach((element) => { element.classList.remove("selected"); });
+      element.classList.add("selected");
+    };
+
+    document.querySelector(".slider").addEventListener('beforexrselect', (ev) => {
+      // Keep slider interactions from affecting the XR scene.
+      ev.preventDefault();
+    });
+  </script>
+</body>
+
+</html>
